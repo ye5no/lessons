@@ -1,0 +1,15 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Lessons Backend API
+  description: Backend API
+components:
+  schemas:
+    Error:
+      $ref: './swagger/_components/error.yaml'
+
+paths:
+  '/api/lessons/list/{tableName}':
+    $ref: './swagger/list/index.yaml'
+  '/api/lessons':
+    $ref: './swagger/search/index.yaml'

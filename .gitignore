@@ -1,0 +1,10 @@
+/node_modules/
+/.idea/
+/build/
+/_trash/
+/_test/
+/package-lock.json
+/storage
+/public/api/parse/logs
+/snapshots
+/fixtures

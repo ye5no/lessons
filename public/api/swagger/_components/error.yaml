@@ -1,0 +1,8 @@
+type: object
+properties:
+  status:
+    type: number
+    example: 400
+  message:
+    type: string
+    example: '100: error message'

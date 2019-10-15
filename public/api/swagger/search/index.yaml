@@ -1,0 +1,80 @@
+get:
+  tags:
+    - Lessons
+  parameters:
+    - name: date
+      in: query
+      required: false
+      schema:
+        type: string
+    - name: status
+      in: query
+      required: false
+      schema:
+        enum:
+          - 0
+          - 1
+    - name: teacherIds
+      in: query
+      required: false
+      schema:
+        type: string
+    - name: studentsCount
+      in: query
+      required: false
+      schema:
+        type: string
+    - name: page
+      in: query
+      required: false
+      schema:
+        type: integer
+    - name: lessonsPerPage
+      in: query
+      required: false
+      schema:
+        type: integer
+  responses:
+    default:
+      description: 'Error'
+      content:
+        application/json:
+          schema:
+            $ref: '../_components/error.yaml'
+post:
+  tags:
+    - Lessons
+  description: 'Set one of lessonsCount or lastDate (!)'
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            teacherIds:
+              type: array
+              example: [1, 2]
+            title:
+              type: string
+              example: 'Blue Ocean'
+            days:
+              type: array
+              example: [0, 1, 3, 6]
+            firstDate:
+              type: string
+              example: '2019-11-01'
+            lessonsCount:
+              type: number
+              example: 9
+            lastDate:
+              type: string
+              example: '2020-02-01'
+  responses:
+    default:
+      description: 'Error'
+      content:
+        application/json:
+          schema:
+            $ref: '../_components/error.yaml'
+

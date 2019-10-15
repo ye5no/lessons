@@ -1,0 +1,16 @@
+get:
+  tags:
+    - Common
+  parameters:
+    - name: tableName
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    default:
+      description: 'Error'
+      content:
+        application/json:
+          schema:
+            $ref: '../_components/error.yaml'
