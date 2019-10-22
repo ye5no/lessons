@@ -13,7 +13,7 @@ const mainURL = ADDRESS.test;
 const prefix = `${mainURL}/api/lessons`;
 
 describe('--------POST /api/lessons/-----------', () => {
-	it('GET with pagination', async () => {
+	it('POST 4 lessons', async () => {
 		const options = {
 			method: 'POST',
 			uri: `${prefix}`,

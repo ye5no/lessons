@@ -84,19 +84,8 @@ export class Creator {
 	}
 
 	async checkTeachers() {
-		const teachers = await Models.teachers.findAll({ where: { id: { [Op.in]: this.teacherIds }}});
+		const teachers = await Models.Teachers.findAll({ where: { id: { [Op.in]: this.teacherIds }}});
 		return teachers.length === this.teacherIds.length;
-	}
-
-	getCreate() {
-		return {
-			teacherIds: this.teacherIds,
-			title: this.title,
-			days: this.days,
-			firstDate: this.firstDate,
-			lessonsCount: this.lessonsCount,
-			lastDate: this.lastDate,
-		};
 	}
 
 	_upDate(date, delta) {
@@ -144,21 +133,18 @@ export class Creator {
 		const result = [];
 		let currentLesson = this._getFirstDate();
 		let counter = 1;
-		// console.log(currentLesson, counter);
 		while (this._whileCondition(currentLesson.date, counter)) {
-			const lesson = await Models.lessons.create({
+			const lesson = await Models.Lessons.create({
 				title: this.title,
 				date: new Date(currentLesson.date.getTime()),
-				status: 0,
 			});
 			result.push(lesson.id);
-			await Promise.all(this.teacherIds.map(teacher_id => Models.lessonTeachers.create({
+			await Promise.all(this.teacherIds.map(teacher_id => Models.LessonTeachers.create({
 				lesson_id: lesson.id,
 				teacher_id,
 			})));
 			currentLesson = this._nextDate(currentLesson.index, currentLesson.date);
 			counter++;
-			// console.log(currentLesson, counter);
 		}
 		return result;
 	}

@@ -1,39 +1,51 @@
-import AppError from '../../utils/AppErrors.js';
 import Models from '../../models';
+import sequelize from '../../utils/sequelize-connector';
 import { QueryBuilder } from './queryBuilder';
 import { Creator } from './creator';
+
 
 export default {
 	async list(ctx) {
 		const { tableName } = ctx.params;
-		let include;
+		let options = {};
 		switch (tableName) {
-			case 'lessonStudents':
-				include = [Models.lessons, Models.students];
+			case 'LessonStudents':
+				options.include = [Models.Lessons, Models.Students];
 				break;
-			case 'lessonTeachers':
-				include = [Models.lessons, Models.teachers];
+			case 'LessonTeachers':
+				options.include = [Models.Lessons, Models.Teachers];
 				break;
-			case 'lessons':
-				include = [Models.students, Models.teachers];
+			case 'Lessons':
+				options.attributes = ['title', 'date', 'status', 'id'].concat([
+					[
+						sequelize.literal(
+							'(SELECT COUNT("student_id") FROM "lesson_students" WHERE "lesson_students"."lesson_id" = "Lessons"."id" AND "lesson_students"."visit" = true)'
+						),
+						'visitCount',
+					],
+				]);
+				options.include = [{
+					model: Models.Students,
+				}, {
+					model: Models.Teachers,
+				}];
 				break;
-			case 'students':
-				include = [Models.lessons];
+			case 'Students':
+				options.include = [Models.Lessons];
 				break;
-			case 'teachers':
-				include = [Models.lessons];
+			case 'Teachers':
+				options.include = [Models.Lessons];
 				break;
-			default: include = [];
+			default: options.include = [];
 		}
-		ctx.body = await Models[tableName].findAll({ include });
+		ctx.body = await Models[tableName].findAll(options);
 	},
 
 	async search(ctx) {
 		const qbuilder = new QueryBuilder(ctx.query);
-		const data = await Models.lessons.findAll(qbuilder.getQuery());
-		QueryBuilder.visitCounter(data);
+		const data = await Models.Lessons.findAll(qbuilder.getQuery());
 		QueryBuilder.reworkAnswer(data);
-		ctx.body = (qbuilder.studentsCount === false) ? data : QueryBuilder.countFilter(data, qbuilder.studentsCount);
+		ctx.body = data;
 	},
 
 	async create(ctx) {
